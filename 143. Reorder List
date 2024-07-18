@@ -1,0 +1,55 @@
+class Solution{ 
+public:
+    Node* reverse(Node* slow){
+        Node* prev = NULL;
+        Node* curr = slow;
+        Node* nextt = slow;
+        
+        while(curr != NULL){
+            nextt = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextt;
+            
+        }
+        return prev;
+    }
+    void reorderList(Node* head) {
+        
+        //if less than three nodes
+
+        if(!head || !head->next || !head->next->next) return;
+        
+        //now find mid
+        Node* slow = head;
+        Node* fast = head;
+
+        //now if odd fast -> next and if size even fast
+
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        //now mid ko slow point karra hain
+
+        Node* rev = reverse(slow);
+        
+        //now merging starts
+
+        Node* temp = head;
+        
+        while(rev->next != NULL){
+
+            //ab one ko 4 se connect but preserve dono ke nexts
+
+            Node* currnext = temp->next;
+            temp->next = rev;
+            
+            Node* revnext = rev->next;
+            rev->next = currnext;
+            
+            rev = revnext;
+            temp = currnext;
+        }
+    }
+};
