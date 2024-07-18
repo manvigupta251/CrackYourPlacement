@@ -1,0 +1,105 @@
+APPROACH 1
+
+class Solution {
+public:
+    void merge(vector<int> &cnt, vector<pair<int, int>> &arr, int left, int mid, int right){
+        vector<pair<int, int>> temp(right - left + 1);
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
+        while(i <= mid && j <= right){
+            if(arr[i].first <= arr[j].first){
+                temp[k++] = arr[j++];
+            }
+            else{
+                //ab agr ek se badha hain toh uske baad ke sabse 
+                //badha hain kyuki sorted toh hain hir3
+                cnt[arr[i].second] += right - j + 1;    
+                temp[k++] = arr[i++];
+            }
+        }
+        while(i <= mid){
+            temp[k++] = arr[i++];
+        }
+        while(j <= right){
+            temp[k++] = arr[j++];
+        }
+        for(int i = left; i<= right; i++){
+            arr[i] = temp[i-left];
+        }
+    }
+    void mergesort(vector<int> &cnt, vector<pair<int, int>> &arr, int left, int right){
+        if(left < right){
+            int mid = left + (right - left)/2;
+            mergesort(cnt, arr, left, mid);
+            mergesort(cnt, arr, mid+1, right);
+            merge(cnt, arr, left, mid, right);
+        }
+    }
+    vector<int> countSmaller(vector<int>& nums) {
+        //3rd approach merge sort with modification
+        //in here i maintain a vector f pair because mujhe 
+        //sorted ke baad pair ke second se pta chl jaega kis indx pr ans dalna hain
+        int n = nums.size();
+        vector<pair<int, int>> arr(n);
+        for(int i = 0; i<nums.size(); i++){
+            arr[i] = {nums[i], i};
+        }
+        vector<int> cnt(n, 0);
+        mergesort(cnt, arr, 0, nums.size()-1);
+        return cnt;
+    }
+};
+
+2nd APPROACH -> TLE on leetcode
+
+public class Solution {
+	public List<Integer> countSmaller(int[] nums) {
+		List<Integer> res = new ArrayList<>();
+		if(nums == null || nums.length == 0) return res;
+		TreeNode root = new TreeNode(nums[nums.length - 1]);
+		res.add(0);
+		for(int i = nums.length - 2; i >= 0; i--) {
+			int count = insertNode(root, nums[i]);
+			res.add(count);
+		}
+		Collections.reverse(res);
+		return res;
+	}
+
+	public int insertNode(TreeNode root, int val) {
+		int smaller = 0;
+        TreeNode temp = new TreeNode(val);
+        boolean isConnected = false;
+		while(!isConnected) {
+			if(temp.data <= root.data) {
+				root.count++;
+				if(root.left == null) {
+					root.left = temp; 
+                    isConnected = true;
+				} else {
+					root = root.left;
+				}
+			} else {
+				smaller += root.count;
+                if(root.right == null) {
+					root.right = temp; 
+                    isConnected = true;
+				} else {
+					root = root.right;
+				}
+			}
+		}
+		return smaller;
+	}
+}
+
+class TreeNode {
+	TreeNode left; 
+	TreeNode right;
+	int data;
+	int count = 1;
+	public TreeNode(int data) {
+		this.data = data;
+	}
+}
