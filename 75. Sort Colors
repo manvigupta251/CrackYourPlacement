@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int i = 0, j = 0, k = nums.size()-1;
+        while(j <= k){
+        //approach is first segment i to j is red then j to k is white then
+        //1 to 2 is blue so we will move j pointer so k tk and swap
+            if(nums[j] == 2){
+                //swap with k
+                swap(nums[j], nums[k]);
+                k--;
+                //bec k pr 2 hona chahiye woh aa gaya
+            }
+            else if(nums[j] == 0){
+                swap(nums[i], nums[j]);
+                i++;
+                j++;
+            }
+            else{
+                j++;
+            }
+        }
+    }
+};
