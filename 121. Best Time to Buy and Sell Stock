@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+    //solution aisi jaise bola max nikalna hain diff fbtw buy and sell
+    //buy jo hain min karenge and current ke sath minus karke update max profit
+        int maxprof = 0;
+        int minbuy = prices[0];
+        for(int i = 1; i<prices.size(); i++){
+            if(prices[i] < minbuy) minbuy = prices[i];
+            else maxprof = max(maxprof, prices[i] - minbuy);
+        }
+        return maxprof;
+    }
+};
