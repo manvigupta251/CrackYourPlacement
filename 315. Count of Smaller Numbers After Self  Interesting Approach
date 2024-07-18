@@ -1,0 +1,22 @@
+BINARY SEARCH APPROACH
+
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& arr) {
+        //1st approachbinary search
+        vector<int> temp;
+        for(int i = 0; i<arr.size(); i++){
+            temp.push_back(arr[i]);
+        }
+        vector<int> ans(arr.size());
+        sort(temp.begin(), temp.end());
+        for(int i = 0; i<arr.size(); i++){
+            //0 1 2 3 4 11 12
+            int indx = lower_bound(temp.begin(), temp.end(), arr[i]) - temp.begin();
+            ans[i] = indx;
+            //now remove 12 as ab hum i age badhaye ab yeh kisika smaller ni ho skta
+            temp.erase(temp.begin() + indx);
+        }
+        return ans;
+    }
+};
